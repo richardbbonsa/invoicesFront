@@ -1,30 +1,22 @@
-import React, { useState, useEffect } from 'react';
-import Table from '@mui/joy/Table';
-import Sheet from '@mui/joy/Sheet';
 import Button from '@mui/joy/Button';
-// import Nav from '../components/Navbar';
-// import { useTokenContext } from "../utils/tokenContext";
-// import { Navigate } from "react-router-dom";
-
-// Funcion para Editar 
-function EditRow(row) {
-    alert('Editar fila');
-    console.log(`Editar fila: ${row.name}`);
-}
+import Sheet from '@mui/joy/Sheet';
+import Table from '@mui/joy/Table';
+import React, { useEffect, useState } from 'react';
+import DeleteRowButton from '../components/DeleteProjectButton';
 
 
-// Funcion para Eliminar
-function DeleteRow(row) {
-    alert('Eliminar Fila');
-    console.log(`Editar fila: ${row.name}`);
-}
 
 
-// // Funcion para Generar invoice
-// function GenerateInvoice(row) {
-//     alert('Generate Invoice');
-//     console.log(`Generar factura para: ${row.name}`);
-// }
+
+// Define la función handleRowDelete que elimina una fila del estado data
+const handleRowDelete = (index) => {
+    const newData = [...data];
+    newData.splice(index, 1);
+    setData(newData);
+};
+
+
+
 
 export default function TableSheet() {
     const [data, setData] = useState([]);
@@ -56,12 +48,13 @@ export default function TableSheet() {
                             </caption>
                             <thead>
                                 <tr>
-                                    <th style={{ width: '7%' }}>Edit / Delete</th>
-                                    <th style={{ width: '5%' }}>ID Client</th>
-                                    <th style={{ width: '8%' }}>Client</th>
-                                    <th style={{ width: '8%' }}>Nit</th>
+                                    <th style={{ width: '4%' }}>Edit</th>
+                                    <th style={{ width: '4%' }}>Delete</th>
+                                    <th style={{ width: '4%' }}>ID Client</th>
+                                    <th style={{ width: '7%' }}>Client</th>
+                                    <th style={{ width: '10%' }}>Nit</th>
                                     <th style={{ width: '10%' }}>Direction</th>
-                                    <th style={{ width: '8%' }}>Number phone&nbsp;</th>
+                                    <th style={{ width: '10%' }}>Number phone&nbsp;</th>
                                     <th style={{ width: '10%' }}>Email&nbsp;</th>
                                 </tr>
                             </thead>
@@ -71,20 +64,15 @@ export default function TableSheet() {
                                         <td>
                                             <Button
                                                 size="s"
-                                                variant="plain"
+                                                variant="outlined"
                                                 color="primary"
                                                 onClick={() => EditRow(row)}
                                             >
                                                 Edit
                                             </Button>
-                                            <Button
-                                                size="s"
-                                                variant="plain"
-                                                color="danger"
-                                                onClick={() => DeleteRow(row)}
-                                            >
-                                                Delete
-                                            </Button>
+                                        </td>
+                                        <td>
+                                            <DeleteRowButton index={index} onDelete={handleRowDelete} />
                                         </td>
                                         <td>{row['ID Client']}</td>
                                         <td>{row.Client}</td>

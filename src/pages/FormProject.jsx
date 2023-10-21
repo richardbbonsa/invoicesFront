@@ -7,7 +7,7 @@ import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
 import Row from 'react-bootstrap/Row';
-import { Navigate } from "react-router-dom";
+// import { Navigate } from "react-router-dom";
 import "../css/style.css";
 
 export default function FormClient() {

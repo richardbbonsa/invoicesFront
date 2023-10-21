@@ -42,7 +42,7 @@ const ExportPDFButton = ({ data }) => {
           <Button
             size="s"
             variant="outlined"
-            color="neutral"
+            color="primary"
           >
             {loading ? 'Cargando documento...' : 'PDF'}
           </Button>

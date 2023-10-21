@@ -2,10 +2,11 @@ import Button from '@mui/joy/Button';
 import Sheet from '@mui/joy/Sheet';
 import Table from '@mui/joy/Table';
 import React, { useEffect, useState } from 'react';
-import deleteProject from '../components/Delete';
-import editProject from '../components/Edit';
+// import deleteProject from '../components/DeleteClientButton';
+// import editProject from '../components/Edit';
 import ExportPDFButton from '../components/PDFDocument';
 import Input from '@mui/joy/Input';
+
 
 function TableSheet() {
     const [data, setData] = useState([]);
@@ -39,18 +40,17 @@ function TableSheet() {
                                 <h1>Invoices</h1>
 
                                 <h6>Search Project</h6>
-                        <Input
-                            size="sm"
-                            placeholder="Search..."
-                            value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
-                            width="20%"
+                                <Input
+                                    size="sm"
+                                    placeholder="Search..."
+                                    value={searchTerm}
+                                    onChange={(e) => setSearchTerm(e.target.value)}
+                                    width="20%"
 
-                        />
+                                />
                             </caption>
                             <thead>
                                 <tr>
-                                    <th style={{ width: '10%' }}>Edit / Delete</th>
                                     <th style={{ width: '6%' }}>ID Invoice</th>
                                     <th style={{ width: '11%' }}>ID Project</th>
                                     <th style={{ width: '11%' }}>Name Project</th>
@@ -70,25 +70,6 @@ function TableSheet() {
                                     )
                                     .map((row, index) => (
                                         <tr key={index}>
-                                            <td style={{ display: 'flex', gap: '8px' }}>
-                                                <Button
-                                                    size="s"
-                                                    variant="outlined"
-                                                    color="neutral"
-                                                    onClick={() => editProject(row.id, data, setData)}
-                                                >
-                                                    Edit
-                                                </Button>
-
-                                                <Button
-                                                    size="s"
-                                                    variant="plain"
-                                                    color="danger"
-                                                    onClick={() => deleteProject(row.id, data, setData)}
-                                                >
-                                                    Delete
-                                                </Button>
-                                            </td>
                                             <td>{row.IdFactura}</td>
                                             <td>{row.idProyecto}</td>
                                             <td>{row.nombreProyecto}</td>

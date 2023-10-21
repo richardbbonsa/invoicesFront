@@ -2,20 +2,32 @@ import Button from '@mui/joy/Button';
 import Sheet from '@mui/joy/Sheet';
 import Table from '@mui/joy/Table';
 import React, { useEffect, useState } from 'react';
-import deleteProject from '../components/Delete';
-import editProject from '../components/Edit';
-// import Nav from '../components/Navbar';
-import ExportPDFButton from '../components/PDFDocument'; // Importa el componente ExportPDFButton
-// import NestedModal from '../pages/Invoice';
-// import { useTokenContext } from "../utils/tokenContext";
-// import { Navigate } from "react-router-dom";
+import DeleteRowButton from '../components/DeleteClientButton';
+import EditRowForm from '../components/EditRowForm'; // Importa el nuevo formulario de edición
 
 function TableSheet() {
     const [data, setData] = useState([]);
-    // const [nestedModalOpen, setNestedModalOpen] = useState(false);
-    // const [selectedRow, setSelectedRow] = useState(null);
-    // const [previewModalOpen, setPreviewModalOpen] = useState(false);
+    const [editingIndex, setEditingIndex] = useState(null); // Nuevo estado para rastrear la fila en edición
 
+    // Define la función handleRowDelete que elimina una fila del estado data
+    const handleRowDelete = (index) => {
+        const newData = [...data];
+        newData.splice(index, 1);
+        setData(newData);
+    };
+
+    // Define la función handleRowEdit que inicia la edición de una fila
+    const handleRowEdit = (index) => {
+        setEditingIndex(index);
+    };
+
+    // Define la función handleRowSave que guarda los datos editados
+    const handleRowSave = (index, updatedData) => {
+        const newData = [...data];
+        newData[index] = updatedData;
+        setData(newData);
+        setEditingIndex(null); // Finaliza la edición
+    };
 
     useEffect(() => {
         // Simula la carga de datos desde un archivo JSON
@@ -31,34 +43,8 @@ function TableSheet() {
         fetchData();
     }, []);
 
-    // const closeNestedModal = () => {
-    //     setNestedModalOpen(true);
-    // };
-
-    // function openNestedModal() {
-    //     setNestedModalOpen(true);
-    // }
-
-
-    // // nuevo modal
-
-    // function openPreviewModal() {
-    //     setPreviewModalOpen(true);
-    // }
-
-    // function closePreviewModal() {
-    //     setPreviewModalOpen(false);
-    // }
-
-
-
-    ///
-
-
-
     return (
         <>
-            {/* <Nav /> */}
             <div className="App-header">
                 <main style={{ marginTop: "-180px ", display: "flex", alignItems: "center", justifyContent: "center", height: "100vh" }}>
                     <Sheet variant="soft" sx={{ pt: 1, borderRadius: 'sm' }}>
@@ -72,37 +58,32 @@ function TableSheet() {
                             </caption>
                             <thead>
                                 <tr>
-                                    <th style={{ width: '8%' }}>Edit / Delete</th>
+                                    <th style={{ width: '5%' }}>Edit</th>
+                                    <th style={{ width: '5%' }}>Delete</th>
                                     <th style={{ width: '6%' }}>ID Project</th>
                                     <th style={{ width: '7%' }}>Name Project</th>
                                     <th style={{ width: '7%' }}>Client</th>
                                     <th style={{ width: '22%' }}>Description Project</th>
                                     <th style={{ width: '8%' }}>Date Start&nbsp;</th>
                                     <th style={{ width: '8%' }}>Date End Preview&nbsp;</th>
-                                    <th style={{ width: '10%' }}>Invoice</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {data.map((row, index) => (
                                     <tr key={index}>
-                                        <td style={{ display: 'flex', gap: '8px' }}>
-                                            <Button
-                                                size="s"
-                                                variant="outlined"
-                                                color="neutral"
-                                                onClick={() => editProject(row.id, data, setData)} // Agrega data y setData
-                                            >
-                                                Edit
-                                            </Button>
-
-                                            <Button
-                                                size="s"
-                                                variant="plain"
-                                                color="danger"
-                                                onClick={() => deleteProject(row.id, data, setData)} // Agrega data y setData 
-                                            >
-                                                Delete
-                                            </Button>
+                                        <td>
+                                            {editingIndex === index ? (
+                                                <EditRowForm
+                                                    initialData={row}
+                                                    onSave={(updatedData) => handleRowSave(index, updatedData)}
+                                                    onCancel={() => setEditingIndex(null)}
+                                                />
+                                            ) : (
+                                                <Button onClick={() => handleRowEdit(index)}>Edit</Button>
+                                            )}
+                                        </td>
+                                        <td>
+                                            <DeleteRowButton index={index} onDelete={handleRowDelete} />
                                         </td>
                                         <td>{row.idProject}</td>
                                         <td>{row.nameProject}</td>
@@ -110,10 +91,6 @@ function TableSheet() {
                                         <td>{row.description}</td>
                                         <td>{row.dateStart}</td>
                                         <td>{row.dateEnd}</td>
-                                        <td style={{ display: 'flex', gap: '10px' }}>
-                                            <ExportPDFButton data={row} />
-                                            {/* Utiliza ExportPDFButton para generar PDF */}
-                                        </td>
                                     </tr>
                                 ))}
                             </tbody>
@@ -121,7 +98,6 @@ function TableSheet() {
                     </Sheet>
                 </main>
             </div>
-
         </>
     );
 }
